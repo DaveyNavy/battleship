@@ -1,0 +1,15 @@
+body {
+    padding: 10rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+}
+
+div {
+    border: 1px solid black;
+}

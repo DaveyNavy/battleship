@@ -9,8 +9,10 @@ export class Gameboard {
     this.shipList = [];
     for (let i = 0; i < 10; i++) {
       this.board.push([]);
+      this.misses.push([]);
       for (let j = 0; j < 10; j++) {
         this.board[i].push(0);
+        this.misses[i].push(0);
       }
     }
   }
@@ -49,7 +51,7 @@ export class Gameboard {
 
   receiveAttack(x, y) {
     if (this.board[x][y] == 0) {
-      this.misses.push([x, y]);
+      this.misses[x][y] = 1;
     } else {
       this.board[x][y].hit();
     }

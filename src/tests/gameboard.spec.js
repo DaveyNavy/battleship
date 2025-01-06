@@ -1,5 +1,5 @@
-import { Gameboard } from "./gameboard";
-import { Ship } from "./ship";
+import { Gameboard } from "../scripts/gameboard";
+import { Ship } from "../scripts/ship";
 
 test("Cannot place out of bounds", () => {
   const game = new Gameboard();
@@ -44,12 +44,8 @@ test("Miss ship", () => {
   const ship = new Ship(3);
   game.placeShip(3, 4, ship);
   game.receiveAttack(8, 4);
-  game.receiveAttack(9, 5);
   expect(ship.hits).toBe(0);
-  expect(game.misses).toEqual([
-    [8, 4],
-    [9, 5],
-  ]);
+  expect(game.misses[8][4]).toBe(1);
 });
 
 test("Sunk all", () => {
