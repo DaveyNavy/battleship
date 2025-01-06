@@ -14,15 +14,21 @@ export class Player {
     }
   }
 
+  isLegalMove(x, y) {
+    if (this.hitList.get(x).includes(y)) {
+      return false;
+    }
+    this.hitList.get(x).push(y);
+    return true;
+  }
+
   makeComputerMove() {
     let x = Math.round(Math.random() * 9);
     let y = Math.round(Math.random() * 9);
-    while (this.hitList.get(x).includes(y)) {
+    while (!this.isLegalMove(x, y)) {
       x = Math.round(Math.random() * 9);
       y = Math.round(Math.random() * 9);
     }
-    this.hitList.get(x).push(y);
-    console.log([x, y]);
     return [x, y];
   }
 }

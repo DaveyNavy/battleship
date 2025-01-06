@@ -18,6 +18,8 @@ const computerTurn = new Event("computer");
 const player = document.querySelector(".my-board");
 const enemy = document.querySelector(".enemy-board");
 
+render(player1.gameBoard, computer.gameBoard);
+
 enemy.addEventListener("computer", () => {
   const move = computer.makeComputerMove();
   player1.gameBoard.receiveAttack(move[0], move[1]);
@@ -26,17 +28,18 @@ enemy.addEventListener("computer", () => {
 });
 
 player.addEventListener("player", () => {
-  render(player1.gameBoard, computer.gameBoard);
   Array.from(enemy.children).forEach((element) => {
     element.addEventListener("click", () => {
-      if (currTurn == "Player") {
-        computer.gameBoard.receiveAttack(
-          element.getAttribute("data-x"),
-          element.getAttribute("data-y")
-        );
+      const x = +element.getAttribute("data-x");
+      const y = +element.getAttribute("data-y");
+
+      if (player1.isLegalMove(x, y)) {
+        computer.gameBoard.receiveAttack(x, y);
         render(player1.gameBoard, computer.gameBoard);
+        enemy.dispatchEvent(computerTurn);
+      } else {
+        alert("You cannot move there!");
       }
-      enemy.dispatchEvent(computerTurn);
     });
   });
 });
