@@ -59,3 +59,13 @@ test("Sunk all", () => {
   game.receiveAttack(4, 3);
   expect(game.sunkAll()).toBe(true);
 });
+
+test("Sunk all when some ships still afloat", () => {
+  const game = new Gameboard();
+  const ship = new Ship(2);
+  const ship2 = new Ship(1);
+  game.placeShip(2, 1, ship);
+  game.placeShip(4, 3, ship2);
+  game.receiveAttack(2, 1);
+  expect(game.sunkAll()).toBe(false);
+});

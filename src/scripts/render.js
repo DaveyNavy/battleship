@@ -7,8 +7,11 @@ export function render(myBoard, enemyBoard) {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       const div = document.createElement("div");
-      if (myBoard.board[j][i] != 0) {
-        div.setAttribute("style", "background-color: black");
+      if (myBoard.misses[j][i] != 0) {
+        div.setAttribute("style", "background-color: blue");
+      } else if (myBoard.hits[j][i] != 0) {
+        div.setAttribute("style", "background-color: red");
+      } else {
       }
       me.appendChild(div);
     }
@@ -20,15 +23,10 @@ export function render(myBoard, enemyBoard) {
       button.setAttribute("data-x", j);
       button.setAttribute("data-y", i);
       if (enemyBoard.misses[j][i] != 0) {
+        button.setAttribute("style", "background-color: blue");
+      } else if (enemyBoard.hits[j][i] != 0) {
         button.setAttribute("style", "background-color: red");
       } else {
-        button.addEventListener("click", () => {
-          enemyBoard.receiveAttack(
-            button.getAttribute("data-x"),
-            button.getAttribute("data-y")
-          );
-          render(myBoard, enemyBoard);
-        });
       }
       enemy.appendChild(button);
     }

@@ -63,9 +63,11 @@ export class Gameboard {
   }
 
   sunkAll() {
-    this.shipList.forEach((element) => {
-      if (!element.isSunk()) return false;
-    });
+    for (const ship of this.shipList) {
+      if (!ship.isSunk()) {
+        return false;
+      }
+    }
     return true;
   }
 }
