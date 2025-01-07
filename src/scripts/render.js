@@ -23,6 +23,7 @@ export function render(myBoard, enemyBoard) {
         div.setAttribute("style", "background-color: red");
       } else if (myBoard.board[i][j] != 0) {
         div.setAttribute("style", "background-color: black");
+        div.setAttribute("data-hasShip", "true");
       }
 
       me.appendChild(div);

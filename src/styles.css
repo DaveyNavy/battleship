@@ -20,13 +20,24 @@ div {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 125px;
     height: 500px;
     gap: 10px;
     border: none;
     left: 700px;
 }
 
+.short {
+    width: 125px;
+}
+
+.long {
+    width: 300px;
+}
+
 .ship {
     background-color: black;
+}
+
+.rotate-ship {
+    transform: rotate(90deg);
 }

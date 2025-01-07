@@ -36,8 +36,24 @@ shipSizes.forEach((size) => {
   myShips.appendChild(div);
 });
 
+const toggleDirection = document.createElement("button");
+toggleDirection.textContent = "Toggle Direction";
+myShips.appendChild(toggleDirection);
+
+let currDirection = "V";
+let currDragged;
+
+toggleDirection.addEventListener("click", () => {
+  currDirection = currDirection == "V" ? "H" : "V";
+  draggables.forEach((e) => {
+    const height = e.offsetHeight;
+    const width = e.offsetWidth;
+    e.setAttribute("style", "width: " + height + "px; height: " + width + "px");
+  });
+  myShips.appendChild(toggleDirection);
+});
+
 place.addEventListener("place", () => {
-  let currDragged;
   draggables.forEach((element) => {
     element.addEventListener("dragstart", (e) => {
       currDragged = e.target;
@@ -48,32 +64,56 @@ place.addEventListener("place", () => {
     div.addEventListener("dragover", (e) => {
       e.preventDefault();
       div.setAttribute("style", "background-color: gray");
+      console.log(currDragged);
     });
 
     div.addEventListener("dragleave", () => {
-      div.setAttribute("style", "background-color: white");
+      if (div.getAttribute("data-hasShip") == "true") {
+        div.setAttribute("style", "background-color: black");
+      } else {
+        div.setAttribute("style", "background-color: white");
+      }
     });
 
     div.addEventListener("drop", (e) => {
       e.preventDefault();
+      console.log(currDragged);
       if (
         player1.gameBoard.canPlace(
           +div.getAttribute("data-x"),
           +div.getAttribute("data-y"),
-          new Ship(Math.round(currDragged.offsetHeight / 50))
+          new Ship(
+            Math.round(
+              (currDirection == "V"
+                ? currDragged.offsetHeight
+                : currDragged.offsetWidth) / 50
+            )
+          ),
+          currDirection == "V"
         )
       ) {
         player1.gameBoard.placeShip(
           +div.getAttribute("data-x"),
           +div.getAttribute("data-y"),
-          new Ship(Math.round(currDragged.offsetHeight / 50))
+          new Ship(
+            Math.round(
+              (currDirection == "V"
+                ? currDragged.offsetHeight
+                : currDragged.offsetWidth) / 50
+            )
+          ),
+          currDirection == "V"
         );
+        draggables = draggables.filter((e) => {
+          return e != currDragged;
+        });
+        console.log(draggables);
         currDragged.parentElement.removeChild(currDragged);
       }
       render(player1.gameBoard, computer.gameBoard);
 
-      if (place.childElementCount == 0) {
-        console.log("Done");
+      if (place.childElementCount == 1) {
+        toggleDirection.setAttribute("style", "visibility: hidden");
         player.dispatchEvent(playerTurn);
       } else place.dispatchEvent(placeShip);
     });
