@@ -1,4 +1,5 @@
 import { Gameboard } from "./gameboard";
+import { Ship } from "./ship";
 
 export class Player {
   isComputer;
@@ -30,5 +31,18 @@ export class Player {
       y = Math.round(Math.random() * 9);
     }
     return [x, y];
+  }
+
+  placeComputerShip(size) {
+    const ship = new Ship(size);
+    let x = Math.round(Math.random() * 9);
+    let y = Math.round(Math.random() * 9);
+    let vertical = !!Math.round(Math.random());
+    while (!this.gameBoard.canPlace(x, y, ship, vertical)) {
+      x = Math.round(Math.random() * 9);
+      y = Math.round(Math.random() * 9);
+      vertical = !!Math.round(Math.random());
+    }
+    this.gameBoard.placeShip(x, y, ship, vertical);
   }
 }

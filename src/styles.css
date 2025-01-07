@@ -2,6 +2,7 @@ body {
     padding: 10rem;
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
 .container {
@@ -12,4 +13,20 @@ body {
 
 div {
     border: 1px solid black;
+}
+
+.my-ships {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 125px;
+    height: 500px;
+    gap: 10px;
+    border: none;
+    left: 700px;
+}
+
+.ship {
+    background-color: black;
 }

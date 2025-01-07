@@ -24,30 +24,34 @@ export class Gameboard {
   canPlace(x, y, ship, vertical = false) {
     if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
     if (!vertical) {
-      if (x + ship.length >= 10) return false;
-
-      for (let i = x; i < x + ship.length; i++) {
-        if (this.board[i][y] != 0) return false;
-      }
-    } else {
       if (y + ship.length >= 10) return false;
 
-      for (let j = y; j < y + ship.length; j++) {
-        if (this.board[x][j] != 0) return false;
+      for (let i = y; i < y + ship.length; i++) {
+        if (this.board[x][i] != 0) {
+          return false;
+        }
+      }
+    } else {
+      if (x + ship.length >= 10) return false;
+
+      for (let j = x; j < x + ship.length; j++) {
+        if (this.board[j][y] != 0) return false;
       }
     }
     return true;
   }
 
   placeShip(x, y, ship, vertical = false) {
-    if (!this.canPlace(x, y, ship, vertical)) return;
+    if (!this.canPlace(x, y, ship, vertical)) {
+      return;
+    }
     if (!vertical) {
-      for (let i = x; i < x + ship.length; i++) {
-        this.board[i][y] = ship;
+      for (let i = y; i < y + ship.length; i++) {
+        this.board[x][i] = ship;
       }
     } else {
-      for (let j = y; j < y + ship.length; j++) {
-        this.board[x][j] = ship;
+      for (let j = x; j < x + ship.length; j++) {
+        this.board[j][y] = ship;
       }
     }
     this.shipList.push(ship);
