@@ -1,3 +1,5 @@
+import { Ship } from "./ship";
+
 export class Gameboard {
   board;
   misses;
@@ -21,36 +23,37 @@ export class Gameboard {
     }
   }
 
-  canPlace(x, y, ship, vertical = false) {
+  canPlace(x, y, length, vertical = false) {
     if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
     if (!vertical) {
-      if (y + ship.length >= 10) return false;
+      if (y + length - 1 >= 10) return false;
 
-      for (let i = y; i < y + ship.length; i++) {
+      for (let i = y; i < y + length; i++) {
         if (this.board[x][i] != 0) {
           return false;
         }
       }
     } else {
-      if (x + ship.length >= 10) return false;
+      if (x + length - 1 >= 10) return false;
 
-      for (let j = x; j < x + ship.length; j++) {
+      for (let j = x; j < x + length; j++) {
         if (this.board[j][y] != 0) return false;
       }
     }
     return true;
   }
 
-  placeShip(x, y, ship, vertical = false) {
-    if (!this.canPlace(x, y, ship, vertical)) {
+  placeShip(x, y, length, vertical = false) {
+    if (!this.canPlace(x, y, length, vertical)) {
       return;
     }
+    const ship = new Ship(length);
     if (!vertical) {
-      for (let i = y; i < y + ship.length; i++) {
+      for (let i = y; i < y + length; i++) {
         this.board[x][i] = ship;
       }
     } else {
-      for (let j = x; j < x + ship.length; j++) {
+      for (let j = x; j < x + length; j++) {
         this.board[j][y] = ship;
       }
     }

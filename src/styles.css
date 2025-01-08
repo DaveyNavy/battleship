@@ -1,5 +1,12 @@
-body {
-    padding: 10rem;
+* {
+    user-select: none;
+}
+h1 {
+    text-align: center;
+}
+
+.content {
+    padding: 5rem 10rem;
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -11,33 +18,40 @@ body {
     grid-template-rows: repeat(10, 50px);
 }
 
-div {
+.container > div {
     border: 1px solid black;
 }
 
+.player {
+    display: flex;
+    gap: 30px;
+}
+
+.ships {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .my-ships {
-    position: absolute;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 500px;
-    gap: 10px;
+    gap: 20px;
     border: none;
-    left: 700px;
-}
-
-.short {
-    width: 125px;
-}
-
-.long {
-    width: 300px;
+    height: 400px;
+    padding-top: 30px;
 }
 
 .ship {
     background-color: black;
+    border: none;
 }
 
-.rotate-ship {
-    transform: rotate(90deg);
+.toggle-button {
+    position: absolute;
+    bottom: 700px;
+    left: 700px
 }

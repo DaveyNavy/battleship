@@ -7,8 +7,6 @@ import { render } from "./scripts/render";
 const player1 = new Player();
 const computer = new Player();
 
-player1.gameBoard.placeShip(0, 0, new Ship(3));
-
 const placeShip = new Event("place");
 const playerTurn = new Event("player");
 const computerTurn = new Event("computer");
@@ -38,11 +36,9 @@ shipSizes.forEach((size) => {
 
 const toggleDirection = document.createElement("button");
 toggleDirection.textContent = "Toggle Direction";
-myShips.appendChild(toggleDirection);
+document.querySelector(".ships").prepend(toggleDirection);
 
 let currDirection = "V";
-let currDragged;
-
 toggleDirection.addEventListener("click", () => {
   currDirection = currDirection == "V" ? "H" : "V";
   draggables.forEach((e) => {
@@ -50,10 +46,11 @@ toggleDirection.addEventListener("click", () => {
     const width = e.offsetWidth;
     e.setAttribute("style", "width: " + height + "px; height: " + width + "px");
   });
-  myShips.appendChild(toggleDirection);
+  document.querySelector(".ships").prepend(toggleDirection);
 });
 
 place.addEventListener("place", () => {
+  let currDragged;
   draggables.forEach((element) => {
     element.addEventListener("dragstart", (e) => {
       currDragged = e.target;
@@ -64,7 +61,6 @@ place.addEventListener("place", () => {
     div.addEventListener("dragover", (e) => {
       e.preventDefault();
       div.setAttribute("style", "background-color: gray");
-      console.log(currDragged);
     });
 
     div.addEventListener("dragleave", () => {
@@ -77,55 +73,41 @@ place.addEventListener("place", () => {
 
     div.addEventListener("drop", (e) => {
       e.preventDefault();
-      console.log(currDragged);
-      if (
-        player1.gameBoard.canPlace(
-          +div.getAttribute("data-x"),
-          +div.getAttribute("data-y"),
-          new Ship(
-            Math.round(
-              (currDirection == "V"
-                ? currDragged.offsetHeight
-                : currDragged.offsetWidth) / 50
-            )
-          ),
-          currDirection == "V"
-        )
-      ) {
-        player1.gameBoard.placeShip(
-          +div.getAttribute("data-x"),
-          +div.getAttribute("data-y"),
-          new Ship(
-            Math.round(
-              (currDirection == "V"
-                ? currDragged.offsetHeight
-                : currDragged.offsetWidth) / 50
-            )
-          ),
-          currDirection == "V"
-        );
-        draggables = draggables.filter((e) => {
-          return e != currDragged;
-        });
-        console.log(draggables);
-        currDragged.parentElement.removeChild(currDragged);
-      }
-      render(player1.gameBoard, computer.gameBoard);
+      const x = +div.getAttribute("data-x");
+      const y = +div.getAttribute("data-y");
+      const size =
+        (currDirection == "V"
+          ? currDragged.offsetHeight
+          : currDragged.offsetWidth) / 50;
+      if (player1.gameBoard.canPlace(x, y, size, currDirection == "V")) {
+        player1.gameBoard.placeShip(x, y, size, currDirection == "V");
+        draggables = draggables.filter((e) => e != currDragged);
+        myShips.removeChild(currDragged);
+        render(player1.gameBoard, computer.gameBoard);
 
-      if (place.childElementCount == 1) {
-        toggleDirection.setAttribute("style", "visibility: hidden");
-        player.dispatchEvent(playerTurn);
-      } else place.dispatchEvent(placeShip);
+        if (place.childElementCount == 0) {
+          document.querySelector(".ships").removeChild(toggleDirection);
+          player.dispatchEvent(playerTurn);
+        } else {
+          place.dispatchEvent(placeShip);
+        }
+      } else {
+        if (div.getAttribute("data-hasShip") == "true") {
+          div.setAttribute("style", "background-color: black");
+        } else {
+          div.setAttribute("style", "background-color: white");
+        }
+      }
     });
   });
 });
 place.dispatchEvent(placeShip);
 
-// // Game Phase
+// Game Phase
 enemy.addEventListener("computer", () => {
   if (computer.gameBoard.sunkAll()) {
     render(player1.gameBoard, computer.gameBoard);
-    alert("Game over! You win!");
+    document.querySelector("#result").textContent = "Game over! You Win!";
     return;
   }
   const move = computer.makeComputerMove();
@@ -137,7 +119,7 @@ enemy.addEventListener("computer", () => {
 player.addEventListener("player", () => {
   if (player1.gameBoard.sunkAll()) {
     render(player1.gameBoard, computer.gameBoard);
-    alert("Game over! You lose!");
+    document.querySelector("#result").textContent = "Game over! You Lose!";
     return;
   }
   Array.from(enemy.children).forEach((element) => {

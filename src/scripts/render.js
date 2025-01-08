@@ -1,13 +1,6 @@
 import { clear } from "./clear";
-import { Ship } from "./ship";
 
 export function render(myBoard, enemyBoard) {
-  function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-  }
-
   clear();
   const me = document.querySelector(".my-board");
   const enemy = document.querySelector(".enemy-board");
@@ -25,7 +18,6 @@ export function render(myBoard, enemyBoard) {
         div.setAttribute("style", "background-color: black");
         div.setAttribute("data-hasShip", "true");
       }
-
       me.appendChild(div);
     }
   }
